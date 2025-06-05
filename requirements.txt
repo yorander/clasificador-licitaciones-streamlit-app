@@ -1,0 +1,11 @@
+streamlit
+pdfplumber
+pandas
+transformers
+google-generativeai
+torch
+matplotlib
+seaborn
+scikit-learn
+accelerate
+Pillow # Importante para PIL.Image
