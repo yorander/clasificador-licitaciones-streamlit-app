@@ -8,22 +8,26 @@ import torch
 import json
 import matplotlib.pyplot as plt
 import seaborn as sns
-from PIL import Image # Para cargar imágenes y usarlas en la app
+from PIL import Image
 
-# --- Configuración de Rutas (¡Ajusta esto según donde copies tus archivos en tu repositorio!) ---
-MODEL_PATH = "./models/modelo_clasificador_licitaciones_final"
+# --- Configuración de Rutas (¡AJUSTADO PARA HUGGING FACE HUB!) ---
+# Nombre del repositorio del modelo en Hugging Face Hub
+# ¡Asegúrate de que 'Yordano35/clasificador-licitaciones-juridico' sea EXACTAMENTE el nombre que usaste al subirlo!
+HF_MODEL_NAME_OR_PATH = "Yordano35/clasificador-licitaciones-juridico"
+
+# Rutas para las imágenes de métricas y logos (estas sí son locales en tu repositorio de GitHub)
 LOG_LOSS_PLOT = "./assets/images/loss_plot.png"
 LOG_EVAL_METRICS_PLOT = "./assets/images/eval_metrics_plot.png"
-LOGO_IMAGE = "./assets/images/logo_licitaciones.png" # Tu logo principal
-DECORATIVE_IMAGE = "./assets/images/decorative_image.png" # Una imagen adicional para el frontend
+LOGO_IMAGE = "./assets/images/logo_licitaciones.png"
+DECORATIVE_IMAGE = "./assets/images/decorative_image.png"
 
 # --- Configuración de Gemini (¡Importante para despliegue!) ---
 try:
     GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 except KeyError:
     st.warning("¡Advertencia! La API Key de Gemini no se encontró en st.secrets. "
-               "Usando una variable de entorno o placeholder para desarrollo local. "
-               "Por favor, configura st.secrets['GEMINI_API_KEY'] para despliegue.")
+                "Usando una variable de entorno o placeholder para desarrollo local. "
+                "Por favor, configura st.secrets['GEMINI_API_KEY'] para despliegue.")
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY_ENV", "TU_API_KEY_AQUI_PARA_PRUEBAS_LOCALES")
 
 
@@ -50,20 +54,24 @@ gemini_model = load_gemini_model()
 @st.cache_resource(show_spinner="Cargando modelo clasificador de licitaciones...")
 def load_classifier_model():
     try:
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-        model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
+        # Aquí es donde cambiamos la carga: de ruta local a Hugging Face Hub
+        tokenizer = AutoTokenizer.from_pretrained(HF_MODEL_NAME_OR_PATH)
+        model = AutoModelForSequenceClassification.from_pretrained(HF_MODEL_NAME_OR_PATH)
         classifier = pipeline(
             "text-classification",
             model=model,
             tokenizer=tokenizer,
             truncation=True,
             max_length=512,
-            device=0 if torch.cuda.is_available() else -1
+            device=0 if torch.cuda.is_available() else -1 # Usa GPU si está disponible
         )
-        st.success("🚀 Modelo clasificador cargado.")
+        st.success("🚀 Modelo clasificador cargado desde Hugging Face Hub.")
         return classifier
     except Exception as e:
-        st.error(f"❌ Error al cargar el modelo clasificador: {e}. Asegúrate de que la ruta {MODEL_PATH} sea correcta y que el modelo esté completo.")
+        st.error(f"❌ Error al cargar el modelo clasificador: {e}. "
+                 f"Asegúrate de que el nombre del repositorio en Hugging Face Hub ({HF_MODEL_NAME_OR_PATH}) "
+                 f"sea correcto y que el modelo esté completo y sea accesible.")
+        st.info("Verifica el nombre del repositorio en https://huggingface.co/models")
         return None
 
 classifier = load_classifier_model()
@@ -144,7 +152,7 @@ with col2:
     st.markdown("""
         **Analiza y predice el estado de tus documentos de licitación al instante.**
         Esta aplicación utiliza inteligencia artificial para clasificar automáticamente
-        si una licitación es `APROBADA` o `RECHAZADA`, optimizando tu toma de decisiones.
+        si una licitación es `APROBADA` o `RECHAZADA`, optimizando la toma de decisiones.
     """)
 
 with col3:
@@ -187,8 +195,10 @@ if uploaded_file is not None:
                 predicted_score = prediction[0]['score']
 
                 try:
+                    # Intenta convertir la etiqueta si tiene formato 'LABEL_X'
                     numeric_label = int(predicted_label_raw.split('_')[1])
                 except (IndexError, ValueError):
+                    # Si no tiene ese formato, o si el split falla, usa las etiquetas directas
                     if predicted_label_raw == "APROBADA":
                         numeric_label = 1
                     elif predicted_label_raw == "RECHAZADA":
@@ -201,9 +211,9 @@ if uploaded_file is not None:
                 col_pred_result, col_pred_prob = st.columns([1, 1])
                 with col_pred_result:
                     if final_prediction_text == "APROBADA":
-                        st.success(f"### Decisión: **{final_prediction_text}** ✅")
+                        st.success(f"### Decisión: **{final_prediction_text}** ")
                     else:
-                        st.error(f"### Decisión: **{final_prediction_text}** ❌")
+                        st.error(f"### Decisión: **{final_prediction_text}** ")
                 with col_pred_prob:
                     st.metric(label="Confianza de la Predicción", value=f"{predicted_score:.2%}")
 
@@ -228,7 +238,7 @@ with metrics_col_left:
         st.image(LOG_LOSS_PLOT, caption="Pérdida de Entrenamiento y Validación por Paso", use_column_width=True)
     else:
         st.warning(f"No se encontró el gráfico de pérdida en {LOG_LOSS_PLOT}.")
-        st.info("Asegúrate de haber copiado `loss_plot.png` a la carpeta `assets/images/`.")
+        st.info("Asegúrate de haber copiado `loss_plot.png` a la carpeta `assets/images/` en tu repositorio.")
 
 with metrics_col_right:
     st.subheader("Métricas de Evaluación del Modelo")
@@ -236,11 +246,11 @@ with metrics_col_right:
         st.image(LOG_EVAL_METRICS_PLOT, caption="Métricas de Evaluación por Época (Accuracy, F1-Score, Precision, Recall)", use_column_width=True)
     else:
         st.warning(f"No se encontró el gráfico de métricas de evaluación en {LOG_EVAL_METRICS_PLOT}.")
-        st.info("Asegúrate de haber copiado `eval_metrics_plot.png` a la carpeta `assets/images/`.")
+        st.info("Asegúrate de haber copiado `eval_metrics_plot.png` a la carpeta `assets/images/` en tu repositorio.")
 
 st.markdown("---")
 st.markdown("""
-    Desarrollado con por [ Anderson, Juan, Mharta y Paula] | [Talento Tech]
+    Desarrollado con ❤️ por [Tu Nombre/Equipo] | [Año]
     """)
 
 # Puedes añadir una imagen al final para un toque final
