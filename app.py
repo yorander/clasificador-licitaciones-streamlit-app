@@ -250,7 +250,7 @@ with metrics_col_right:
 
 st.markdown("---")
 st.markdown("""
-    Desarrollado con ❤️ por [Tu Nombre/Equipo] | [Año]
+    Desarrollado por [grupo Tech IA Anderson y compañeros] | [2025]
     """)
 
 # Puedes añadir una imagen al final para un toque final
