@@ -21,4 +21,4 @@ Ver `requirements.txt`.
 
 ## Autor
 
-[Proyecto Final IA SANBUENAVENTURA o usuario GitHub]
+[Proyecto Final IA Talento Tech SANBUENAVENTURA]

@@ -240,7 +240,7 @@ with metrics_col_right:
 
 st.markdown("---")
 st.markdown("""
-    Desarrollado con por [Tu Nombre/Equipo] | [Año]
+    Desarrollado con por [ Anderson, Juan, Mharta y Paula] | [Talento Tech]
     """)
 
 # Puedes añadir una imagen al final para un toque final
