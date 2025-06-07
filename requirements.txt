@@ -1,12 +1,12 @@
 streamlit==1.45.1
-pdfplumber==0.11.6# Versión actual estable
-pandas==2.2.2 # O la más reciente estable
-transformers==4.42.4 # La última estable al 30 de mayo de 2025 es 4.52.4, pero 4.42.4 es muy común y estable
-google-generativeai==0.8.0 # O la última estable
-torch==2.3.0 # Considera la versión con CPU o CUDA si vas a usar GPU en tu entorno local. En Cloud suele autodetectarse.
-matplotlib==3.9.0 # O la más reciente estable
-seaborn==0.13.2 # O la más reciente estable
-scikit-learn==1.5.0 # O la más reciente estable
-accelerate==0.30.1 # Muy útil para optimizar la carga y uso de modelos grandes con Transformers
-Pillow==10.3.0 # O la más reciente estable
-protobuf<4.0.0 # Mantenemos esta restricción por compatibilidad con algunas dependencias
+pdfplumber==0.11.6
+pandas==2.2.2 
+transformers==4.42.4 
+google-generativeai==0.8.0 
+torch==2.3.0 
+matplotlib==3.9.0 
+seaborn==0.13.2 
+scikit-learn==1.5.0 
+accelerate==0.30.1 
+Pillow==10.3.0 
+protobuf<4.0.0 
