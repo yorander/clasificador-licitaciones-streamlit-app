@@ -1,5 +1,5 @@
 streamlit==1.45.1
-pdfplumber==0.12.0 # Versión actual estable
+pdfplumber==0.11.6# Versión actual estable
 pandas==2.2.2 # O la más reciente estable
 transformers==4.42.4 # La última estable al 30 de mayo de 2025 es 4.52.4, pero 4.42.4 es muy común y estable
 google-generativeai==0.8.0 # O la última estable
