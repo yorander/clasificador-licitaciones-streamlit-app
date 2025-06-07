@@ -13,7 +13,7 @@ from PIL import Image
 # --- Configuración de Rutas (¡AJUSTADO PARA HUGGING FACE HUB!) ---
 # Nombre del repositorio del modelo en Hugging Face Hub
 # ¡Asegúrate de que 'Yordano35/clasificador-licitaciones-juridico' sea EXACTAMENTE el nombre que usaste al subirlo!
-HF_MODEL_NAME_OR_PATH = "Yordano35/clasificador-licitaciones-juridico"
+HF_MODEL_NAME_OR_PATH = "Yordan035/clasificador-licitaciones-juridico"
 
 # Rutas para las imágenes de métricas y logos (estas sí son locales en tu repositorio de GitHub)
 LOG_LOSS_PLOT = "./assets/images/loss_plot.png"
@@ -250,7 +250,7 @@ with metrics_col_right:
 
 st.markdown("---")
 st.markdown("""
-    Desarrollado por [grupo Tech IA Anderson y compañeros] | [2025]
+    Desarrollado por [Equipo Tech Anderson y compañeros] | [2025]
     """)
 
 # Puedes añadir una imagen al final para un toque final
