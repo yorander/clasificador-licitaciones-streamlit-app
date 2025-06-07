@@ -3,7 +3,7 @@ pdfplumber==0.11.6
 pandas==2.2.2 
 transformers==4.42.4 
 google-generativeai==0.8.0 
-torch==2.3.0 
+torch==2.3.0+cpu
 matplotlib==3.9.0 
 seaborn==0.13.2 
 scikit-learn==1.5.0 
